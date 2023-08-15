@@ -1,4 +1,4 @@
-package com.spring.batch.common.config;
+package com.spring.batch.common.config.batch;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.configuration.JobRegistry;

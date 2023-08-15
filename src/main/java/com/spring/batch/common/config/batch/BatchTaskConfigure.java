@@ -1,4 +1,4 @@
-package com.spring.batch.common.config;
+package com.spring.batch.common.config.batch;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
