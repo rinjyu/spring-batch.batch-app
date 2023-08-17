@@ -1,4 +1,4 @@
-package com.spring.batch.common.domain;
+package com.spring.batch.job.common.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
