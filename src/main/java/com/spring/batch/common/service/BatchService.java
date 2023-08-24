@@ -11,6 +11,7 @@ import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.batch.core.launch.NoSuchJobException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
@@ -39,10 +40,18 @@ public class BatchService {
         for (String jobName : jobNames.split(",")) {
             log.info(">>> {} Start <<<", jobName);
             try {
+                Job job = getJob(jobName);
                 JobParameters jobParameters = new JobParametersBuilder(convertJobParameters(args))
-                        .addString("executeDate", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")))
+                        .addString("run.date", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")))
                         .toJobParameters();
-                JobExecution jobExecution = jobLauncher.run(getJob(jobName), jobParameters);
+
+                if (!ObjectUtils.isEmpty(job.getJobParametersIncrementer())) {
+                    jobParameters = new JobParametersBuilder(jobParameters, jobExplorer)
+                            .getNextJobParameters(job)
+                            .toJobParameters();
+                }
+
+                JobExecution jobExecution = jobLauncher.run(job, jobParameters);
 
                 BatchStatus batchStatus = jobExecution.getStatus();
                 log.info("[startBatchJob] {} batchStatus ::: {}", jobName, batchStatus.name());

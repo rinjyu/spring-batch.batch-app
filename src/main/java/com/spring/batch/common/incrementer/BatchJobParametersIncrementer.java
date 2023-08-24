@@ -11,12 +11,12 @@ import java.time.format.DateTimeFormatter;
 @Slf4j
 public class BatchJobParametersIncrementer implements JobParametersIncrementer {
 
-    private static String batchRunDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddhhmmss"));
-    private static String RUN_DATE_KEY = "run.date";
+    private static String batchRunDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+    private static String RUN_DATE_TIME_KEY = "run.dateTime";
 
     @Override
     public JobParameters getNext(JobParameters jobParameters) {
-        log.debug("batchRunDate ::: {}", batchRunDate);
-        return new JobParametersBuilder().addString(RUN_DATE_KEY, batchRunDate).toJobParameters();
+        log.debug("batchRunDate ::: {}", batchRunDateTime);
+        return new JobParametersBuilder(jobParameters).addString(RUN_DATE_TIME_KEY, batchRunDateTime).toJobParameters();
     }
 }
