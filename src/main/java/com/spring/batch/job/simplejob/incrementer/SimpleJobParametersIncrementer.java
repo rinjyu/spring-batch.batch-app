@@ -2,9 +2,9 @@ package com.spring.batch.job.simplejob.incrementer;
 
 import com.spring.batch.common.incrementer.BatchJobParametersIncrementer;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.util.ObjectUtils;
 
 @Slf4j
 public class SimpleJobParametersIncrementer extends BatchJobParametersIncrementer {

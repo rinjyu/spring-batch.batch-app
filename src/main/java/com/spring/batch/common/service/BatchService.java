@@ -23,6 +23,8 @@ import java.util.Set;
 @Service
 public class BatchService {
 
+    private static String RUN_DATE_TIME_KEY = "run.dateTime";
+
     private final JobLauncher jobLauncher;
     private final JobExplorer jobExplorer;
     private final JobRegistry jobRegistry;
@@ -41,15 +43,7 @@ public class BatchService {
             log.info(">>> {} Start <<<", jobName);
             try {
                 Job job = getJob(jobName);
-                JobParameters jobParameters = new JobParametersBuilder(convertJobParameters(args))
-                        .addString("run.date", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")))
-                        .toJobParameters();
-
-                if (!ObjectUtils.isEmpty(job.getJobParametersIncrementer())) {
-                    jobParameters = new JobParametersBuilder(jobParameters, jobExplorer)
-                            .getNextJobParameters(job)
-                            .toJobParameters();
-                }
+                JobParameters jobParameters = generateJobParameters(job, convertJobParameters(args));
 
                 JobExecution jobExecution = jobLauncher.run(job, jobParameters);
 
@@ -118,6 +112,19 @@ public class BatchService {
     private JobParameters convertJobParameters(String... args) {
         Properties properties = StringUtils.splitArrayElementsIntoProperties(args, "=");
         JobParameters jobParameters = new DefaultJobParametersConverter().getJobParameters(properties);
+        return jobParameters;
+    }
+
+    private JobParameters generateJobParameters(Job job, JobParameters jobParameters) {
+        jobParameters = new JobParametersBuilder(ObjectUtils.isEmpty(jobParameters) ? new JobParameters() : jobParameters)
+                .addString(RUN_DATE_TIME_KEY, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")))
+                .toJobParameters();
+
+        if (!ObjectUtils.isEmpty(job.getJobParametersIncrementer())) {
+            jobParameters = new JobParametersBuilder(jobParameters, jobExplorer)
+                    .getNextJobParameters(job)
+                    .toJobParameters();
+        }
         return jobParameters;
     }
 }

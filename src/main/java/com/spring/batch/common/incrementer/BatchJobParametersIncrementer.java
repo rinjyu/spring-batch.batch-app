@@ -4,19 +4,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.JobParametersIncrementer;
+import org.springframework.util.ObjectUtils;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 @Slf4j
 public class BatchJobParametersIncrementer implements JobParametersIncrementer {
 
-    private static String batchRunDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
-    private static String RUN_DATE_TIME_KEY = "run.dateTime";
+    private static String RUN_DATE_KEY = "run.date";
 
     @Override
     public JobParameters getNext(JobParameters jobParameters) {
-        log.debug("batchRunDate ::: {}", batchRunDateTime);
-        return new JobParametersBuilder(jobParameters).addString(RUN_DATE_TIME_KEY, batchRunDateTime).toJobParameters();
+        return (new JobParametersBuilder(ObjectUtils.isEmpty(jobParameters) ? new JobParameters() : jobParameters))
+                .addDate(RUN_DATE_KEY, new Date())
+                .toJobParameters();
     }
 }
