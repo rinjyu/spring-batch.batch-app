@@ -8,6 +8,9 @@ spring:
       name: ${spring.application.name}
       profile: ${spring.profiles.active}
       fail-fast: true
+    task:
+      initialize:
+        enable: false
   banner:
     location: classpath:banner/banner.txt
 

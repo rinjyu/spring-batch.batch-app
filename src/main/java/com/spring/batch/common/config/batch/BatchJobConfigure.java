@@ -27,7 +27,6 @@ import javax.sql.DataSource;
 @Configuration
 public class BatchJobConfigure extends DefaultBatchConfigurer {
 
-
     private final DataSource dataSource;
     private final DataSourceTransactionManager dataSourceTransactionManager;
     private final JobExplorer jobExplorer;
