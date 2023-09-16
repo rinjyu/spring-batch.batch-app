@@ -95,6 +95,15 @@
         </encoder>
     </appender>
 
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>127.0.0.1:5000</destination>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <jsonGeneratorDecorator class="net.logstash.logback.decorate.CompositeJsonGeneratorDecorator">
+                <decorator class="net.logstash.logback.decorate.PrettyPrintingJsonGeneratorDecorator"/>
+            </jsonGeneratorDecorator>
+        </encoder>
+    </appender>
+
     <logger name="com.spring.batch" level="DEBUG"/>
     <logger name="com.spring.batch.common.listener.BatchJobExecutionListener" level="INFO"/>
     <logger name="com.spring.batch.common.listener.BatchStepExecutionListener" level="INFO"/>
@@ -118,6 +127,7 @@
         <appender-ref ref="BATCH_JOB_RESULT_CONSOLE"/>
         <appender-ref ref="BATCH_STEP_RESULT_CONSOLE"/>
         <appender-ref ref="BATCH_SERVICE_CONSOLE"/>
+        <appender-ref ref="LOGSTASH"/>
     </root>
 
 </configuration>

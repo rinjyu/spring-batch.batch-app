@@ -113,6 +113,15 @@
         <appender-ref ref="FILE"/>
     </appender>
 
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>127.0.0.1:5000</destination>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <jsonGeneratorDecorator class="net.logstash.logback.decorate.CompositeJsonGeneratorDecorator">
+                <decorator class="net.logstash.logback.decorate.PrettyPrintingJsonGeneratorDecorator"/>
+            </jsonGeneratorDecorator>
+        </encoder>
+    </appender>
+
     <logger name="com.spring.batch" level="INFO"/>
     <logger name="com.zaxxer.hikari" level="INFO"/>
     <logger name="javax.sql.DataSource" level="OFF"/>
@@ -131,6 +140,7 @@
     <root level="${LOG_LEVEL}">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="ASYNC_FILE"/>
+        <appender-ref ref="LOGSTASH"/>
     </root>
 
 </configuration>
